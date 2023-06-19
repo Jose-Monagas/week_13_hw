@@ -31,9 +31,38 @@ exports.getTodo = async (req, res) => {
   try {
     const todo = await Todo.findOne({ _id: req.params.id });
     if (!todo) {
-      throw new Error("Did not find an item to update");
+      throw new Error("Did not find this item");
     } else {
       res.json(todo);
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.updateTodo = async (req, res) => {
+  try {
+    const todo = await Todo.findOne({ _id: req.params.id });
+    if (!todo) {
+      res.status(404).json({ message: "Did not find an item to update" });
+    } else {
+      const properties = Object.keys(req.body);
+      properties.forEach((property) => (todo[property] = req.body[property]));
+      await todo.save();
+      res.json(todo);
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.deleteTodo = async (req, res) => {
+  try {
+    const todoDeleted = await Todo.findOneAndRemove({ _id: req.params.id });
+    if (!todoDeleted) {
+      res.status(404).json({ message: "Nothing found to delete" });
+    } else {
+      res.json(todoDeleted);
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
