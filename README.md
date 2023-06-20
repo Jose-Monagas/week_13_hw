@@ -1,3 +1,5 @@
+# This README contains the Written Homework and the description of the TODO API (scroll down past the written homework)
+
 ## Written Homework
 
 1. What is Express in Node.js and why is it used?
@@ -166,3 +168,25 @@
     3. Test Execution: the test cases are performed. End-users interact with the app and validate that the system is performing as expected
     4. Resolution: here any issues found are identified and reported.
     5. Acceptance Decision: based on user's feedback a decision is made to accept or reject the software deployment.
+
+## Todo API:
+
+This API allows users to create a custom todo list, update any entry or delete something. This API was built following the MVC workflow.
+
+### Instructions on how to use
+
+Run the server and use Postman to interact with the API. The following routes are available for use:
+
+- localhost:3000/todos -> all todos
+- (GET): localhost:3000/todos/:id -> get a single todo
+- (POST): localhost:3000/todos -> create a new todo
+- (PUT): localhost:3000/todos/:id -> update a single todo
+- (DELETE): localhost:3000/todos/:id -> delete a todo
+
+### Testing
+
+Jest and Supertest were implemented to make sure that the endpoints are working correctly. Edge case tests were also created to make sure the API behaves as expected when the user doesn't provide a valid entry.
+
+### Load Testing
+
+Artillery was implemented to make sure the API can handle enough server requests
