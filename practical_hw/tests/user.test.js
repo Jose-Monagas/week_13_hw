@@ -67,3 +67,41 @@ describe("Test the todos endpoints", () => {
     expect(response.body._id).toEqual(todo._id.toString());
   });
 });
+describe("Test endpoints for edge cases", () => {
+  test("It should not create a to do", async () => {
+    const response = await request(app)
+      .post("/todos")
+      .send({ description: "Buy Groceries" });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toEqual("Tile is mandatory");
+  });
+
+  test("It should not find a todo entry", async () => {
+    const todos = [];
+    Todo.find = jest.fn().mockResolvedValue(todos);
+
+    const response = await request(app).get("/todos");
+    expect(response.statusCode).toBe(404);
+    expect(response.body.message).toEqual("No todo was  found");
+  });
+
+  test("It should not update todos", async () => {
+    const todo = new Todo({ title: "Haircut", description: "Book appoinment" });
+    const someId = new mongoose.Types.ObjectId();
+    await todo.save();
+
+    const response = await request(app)
+      .put(`/todos/${randomId}`)
+      .send({ title: "study", description: "homework" });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.message).toEqual("No valid todo to be updated");
+  });
+
+  test("It should not delete a todo", async () => {
+    const someId = new mongoose.Types.ObjectId();
+    const response = await request(app).delete(`todos/${someId}`);
+    expect(response.statusCode).toBe(404);
+  });
+});
